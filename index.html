@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crypto Regression Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main class="layout">
+    <header class="hero">
+      <h1>Crypto Regression Dashboard</h1>
+      <p>Select two Bitfinex symbols, a candle resolution, and observation count to run a linear regression and inspect the residuals.</p>
+      <form id="control-form" class="controls" autocomplete="off">
+        <div class="field">
+          <label for="asset-a-input">Asset A</label>
+          <input id="asset-a-input" name="assetA" type="text" value="ETH" required />
+        </div>
+        <div class="field">
+          <label for="asset-b-input">Asset B</label>
+          <input id="asset-b-input" name="assetB" type="text" value="BTC" required />
+        </div>
+        <div class="field">
+          <label for="resolution-select">Resolution</label>
+          <select id="resolution-select" name="resolution">
+            <option value="1m">1m</option>
+            <option value="5m">5m</option>
+            <option value="15m">15m</option>
+            <option value="30m">30m</option>
+            <option value="1h" selected>1h</option>
+            <option value="3h">3h</option>
+            <option value="6h">6h</option>
+            <option value="12h">12h</option>
+            <option value="1D">1D</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="limit-input">Observations</label>
+          <input id="limit-input" name="limit" type="number" min="10" max="1000" step="10" value="200" required />
+        </div>
+        <button id="refresh-button" type="submit">Load Data</button>
+      </form>
+      <p class="status" id="status-text">Awaiting input...</p>
+    </header>
+
+    <section class="charts-grid">
+      <article class="chart-card">
+        <h2 id="combined-history-heading">ETH & BTC Price History</h2>
+        <div class="chart-inner">
+          <canvas id="combined-history-chart" aria-label="Combined price history line chart"></canvas>
+        </div>
+      </article>
+      <article class="chart-card">
+        <h2 id="regression-heading">Regression</h2>
+        <div class="chart-inner">
+          <canvas id="regression-chart" aria-label="Scatter plot with regression line"></canvas>
+        </div>
+      </article>
+      <article class="chart-card">
+        <h2 id="residual-heading">Residuals Over Time</h2>
+        <div class="chart-inner">
+          <canvas id="residual-chart" aria-label="Regression residuals line chart"></canvas>
+        </div>
+      </article>
+    </section>
+
+    <section class="details">
+      <h2>Regression Details</h2>
+      <dl class="stats" id="regression-stats">
+        <div>
+          <dt>Slope</dt>
+          <dd id="slope-value">-</dd>
+        </div>
+        <div>
+          <dt>Intercept</dt>
+          <dd id="intercept-value">-</dd>
+        </div>
+        <div>
+          <dt>R^2</dt>
+          <dd id="r2-value">-</dd>
+        </div>
+      </dl>
+      <p class="note">Candles are requested from the Bitfinex public API based on the controls above. Regression is computed as <span id="asset-a-label">Asset A</span> = slope x <span id="asset-b-label">Asset B</span> + intercept.</p>
+    </section>
+  </main>
+  <footer class="footer">
+    Built by Olivier Bonnemaison ·
+    <a href="https://staging.d3iwsh8gt9f3of.amplifyapp.com" target="_blank" rel="noreferrer">
+      Web Site
+    </a>
+  </footer>
+</body>
+</html>
